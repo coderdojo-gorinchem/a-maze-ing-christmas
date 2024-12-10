@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>A-Maze-ing - Christmas Edition</title>
+
+    <style>
+      body {
+        align-items: center;
+        background-color: #036f3e;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-around;
+        user-select: none;
+      }
+
+      html {
+        display: flex;
+      }
+
+      #maze {
+        --cell-size: 80cqmin;
+        --maze-size: 75cqmin;
+
+        block-size: var(--maze-size);
+        display: flex;
+        flex-direction: column;
+        inline-size: var(--maze-size);
+
+        & > div {
+          container-type: size;
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+
+          & > div {
+            display: grid;
+            flex: 1;
+            grid-template-areas: "cell";
+
+            & > * {
+              font-size: var(--cell-size);
+              grid-area: cell;
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <div id="maze">
+        <div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+        </div>
+        <div>
+          <div></div>
+          <div></div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+        </div>
+        <div>
+          <div><div>🎄</div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+          <div><div>🎄</div></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
