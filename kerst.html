@@ -80,4 +80,75 @@
       </div>
     </div>
   </body>
+
+  <script>
+    const leftKeys = ["ArrowLeft", "a"];
+    const rightKeys = ["ArrowRight", "d"];
+    const upKeys = ["ArrowUp", "w"];
+    const downKeys = ["ArrowDown", "s"];
+
+    const player = document.querySelector(".player");
+
+    window.addEventListener("keydown", handleInput(player));
+
+    function calculateMovement(event, currentColumn, currentRow) {
+      if (leftKeys.includes(event.key)) {
+        return [currentRow, currentColumn - 1];
+      } else if (rightKeys.includes(event.key)) {
+        return [currentRow, currentColumn + 1];
+      } else if (downKeys.includes(event.key)) {
+        return [currentRow + 1, currentColumn];
+      } else if (upKeys.includes(event.key)) {
+        return [currentRow - 1, currentColumn];
+      }
+
+      return [currentRow, currentColumn];
+    }
+
+    function getElementIndexInParent(element) {
+      return Array.prototype.indexOf.call(element.parentNode.children, element);
+    }
+
+    function handleInput(player) {
+      return function (event) {
+        const currentColumn = getElementIndexInParent(player.parentNode);
+        const currentRow = getElementIndexInParent(
+          player.parentNode.parentNode,
+        );
+
+        const [targetRow, targetColumn] = calculateMovement(
+          event,
+          currentColumn,
+          currentRow,
+        );
+
+        if (targetColumn !== currentColumn || targetRow !== currentRow) {
+          move(player, targetRow, targetColumn);
+        }
+      };
+    }
+
+    function move(player, targetRow, targetColumn) {
+      const mazeElement = player.parentNode.parentNode.parentNode;
+      const mazeRowElements = mazeElement.children;
+
+      if (targetRow < 0 || targetRow >= mazeRowElements.length) {
+        return;
+      }
+
+      const targetRowElement = mazeRowElements[targetRow];
+
+      if (
+        targetColumn < 0 ||
+        (player.parentNode.parentNode === targetRowElement &&
+          targetColumn === targetRowElement.children.length)
+      ) {
+        return;
+      }
+
+      const targetCellElement = targetRowElement.children[targetColumn];
+      player.parentNode.removeChild(player);
+      targetCellElement.appendChild(player);
+    }
+  </script>
 </html>
