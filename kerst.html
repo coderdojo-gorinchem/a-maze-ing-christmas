@@ -52,30 +52,30 @@
     <div>
       <div id="maze">
         <div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
         </div>
         <div>
           <div>
             <div class="player">🦌</div>
           </div>
           <div></div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
         </div>
         <div>
-          <div><div>🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
           <div></div>
           <div></div>
           <div></div>
         </div>
         <div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
-          <div><div>🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
+          <div><div data-collide="true">🎄</div></div>
         </div>
       </div>
     </div>
@@ -147,8 +147,17 @@
       }
 
       const targetCellElement = targetRowElement.children[targetColumn];
-      player.parentNode.removeChild(player);
-      targetCellElement.appendChild(player);
+
+      if (
+        targetCellElement.children.length === 0 ||
+        !Array.prototype.some.call(
+          targetCellElement.children,
+          (child) => child.dataset.collide === "true",
+        )
+      ) {
+        player.parentNode.removeChild(player);
+        targetCellElement.appendChild(player);
+      }
     }
   </script>
 </html>
