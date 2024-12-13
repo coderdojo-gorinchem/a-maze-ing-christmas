@@ -59,6 +59,8 @@
   </head>
 
   <body>
+    <h1>Score: <span id="score">0</span></h1>
+
     <div>
       <div id="maze">
         <div>
@@ -71,14 +73,14 @@
           <div>
             <div class="player" data-name="Rudolph">🦌</div>
           </div>
-          <div></div>
+          <div><div data-enter="collectReward" data-score="1">🎁</div></div>
           <div><div data-collide="true">🎄</div></div>
           <div><div data-collide="true">🎄</div></div>
         </div>
         <div>
           <div><div data-collide="true">🎄</div></div>
-          <div></div>
-          <div></div>
+          <div><div data-enter="collectReward" data-score="-3">❄️</div></div>
+          <div><div data-enter="collectReward" data-score="10">🌟</div></div>
           <div><div data-enter="escape">📜</div></div>
         </div>
         <div>
@@ -145,6 +147,10 @@
 
     function handlePlayerEvent(player, event, entity) {
       switch (event) {
+        case "collectReward":
+          entity.parentNode.removeChild(entity);
+          updateScore(parseInt(entity.dataset.score));
+          break;
         case "escape":
           entity.parentNode.removeChild(entity);
           setEscapee(player.dataset.name ?? "speler");
@@ -206,6 +212,12 @@
           }
         });
       });
+    }
+
+    function updateScore(scoreAdjustment) {
+      const scoreElement = document.querySelector("#score");
+      const newScore = parseInt(scoreElement.innerText) + scoreAdjustment;
+      scoreElement.innerText = newScore;
     }
   </script>
 </html>
