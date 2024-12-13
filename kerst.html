@@ -45,6 +45,16 @@
           }
         }
       }
+
+      h1 {
+        color: firebrick;
+        font-family: sans-serif;
+        text-align: center;
+
+        &:has(> [data-escapee=""]) {
+          visibility: hidden;
+        }
+      }
     </style>
   </head>
 
@@ -59,7 +69,7 @@
         </div>
         <div>
           <div>
-            <div class="player">🦌</div>
+            <div class="player" data-name="Rudolph">🦌</div>
           </div>
           <div></div>
           <div><div data-collide="true">🎄</div></div>
@@ -69,7 +79,7 @@
           <div><div data-collide="true">🎄</div></div>
           <div></div>
           <div></div>
-          <div></div>
+          <div><div data-enter="escape">📜</div></div>
         </div>
         <div>
           <div><div data-collide="true">🎄</div></div>
@@ -79,6 +89,11 @@
         </div>
       </div>
     </div>
+
+    <h1>
+      Gefeliciteerd <span data-escapee=""></span>! Je hebt de lijst van de
+      kerstman teruggevonden!
+    </h1>
   </body>
 
   <script>
@@ -128,6 +143,20 @@
       };
     }
 
+    function handlePlayerEvent(player, event, entity) {
+      switch (event) {
+        case "escape":
+          entity.parentNode.removeChild(entity);
+          setEscapee(player.dataset.name ?? "speler");
+          player.dataset.leave = "resetEscapee";
+          break;
+        case "resetEscapee":
+          delete player.dataset.leave;
+          setEscapee("");
+          break;
+      }
+    }
+
     function move(player, targetRow, targetColumn) {
       const mazeElement = player.parentNode.parentNode.parentNode;
       const mazeRowElements = mazeElement.children;
@@ -155,9 +184,28 @@
           (child) => child.dataset.collide === "true",
         )
       ) {
+        triggerCellEvents(player.parentNode, ["leave"]);
         player.parentNode.removeChild(player);
+
         targetCellElement.appendChild(player);
+        triggerCellEvents(player.parentNode, ["enter"]);
       }
+    }
+
+    function setEscapee(escapeeName) {
+      const escapeeElement = document.querySelector("[data-escapee]");
+      escapeeElement.dataset.escapee = escapeeName;
+      escapeeElement.innerText = escapeeName;
+    }
+
+    function triggerCellEvents(cell, events) {
+      Array.prototype.forEach.call(cell.children, (child) => {
+        events.forEach((event) => {
+          if (event in child.dataset) {
+            handlePlayerEvent(player, child.dataset[event], child);
+          }
+        });
+      });
     }
   </script>
 </html>
