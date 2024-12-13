@@ -106,7 +106,8 @@
 
     const player = document.querySelector(".player");
 
-    window.addEventListener("keydown", handleInput(player));
+    const playerHandler = handleInput(player);
+    window.addEventListener("keydown", playerHandler);
 
     function calculateMovement(event, currentColumn, currentRow) {
       if (leftKeys.includes(event.key)) {
@@ -218,6 +219,28 @@
       const scoreElement = document.querySelector("#score");
       const newScore = parseInt(scoreElement.innerText) + scoreAdjustment;
       scoreElement.innerText = newScore;
+    }
+
+    window.addEventListener("gamepadconnected", (event) => {
+      processGamepadInputs();
+    });
+
+    function processGamepadInputs() {
+      const [gamepad] = navigator.getGamepads();
+
+      if (gamepad.buttons[1].pressed && gamepad.buttons[3].pressed) {
+        location.reload();
+      } else if (gamepad.buttons[12].pressed) {
+        playerHandler({ key: "ArrowUp" });
+      } else if (gamepad.buttons[13].pressed) {
+        playerHandler({ key: "ArrowDown" });
+      } else if (gamepad.buttons[14].pressed) {
+        playerHandler({ key: "ArrowLeft" });
+      } else if (gamepad.buttons[15].pressed) {
+        playerHandler({ key: "ArrowRight" });
+      }
+
+      setTimeout(processGamepadInputs, 100);
     }
   </script>
 </html>
